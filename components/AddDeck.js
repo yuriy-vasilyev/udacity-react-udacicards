@@ -1,18 +1,39 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, TextInput, Platform, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Platform,
+  TouchableOpacity,
+  KeyboardAvoidingView
+} from 'react-native';
 import * as colors from '../utils/colors';
+import { addDeck } from '../actions';
+import { submitDeck } from '../utils/api'
 
 class AddDeck extends Component {
   state = {
     inputText: ''
   }
 
+  submit = ( title ) => {
+    if ( '' === title ) {
+      return;
+    }
+    
+    this.props.dispatch( addDeck( title ) );
+    submitDeck( title );
+    this.props.navigation.navigate( 'Decks' );
+    this.setState({ inputText: '' });
+  }
+
   render() {
     const { inputText } = this.state;
 
     return (
-      <View style={ styles.container }>
+      <KeyboardAvoidingView behavior="padding" style={ styles.container }>
         <View>
           <Text style={ styles.title }>What is the title of your new deck?</Text>
         </View>
@@ -24,11 +45,14 @@ class AddDeck extends Component {
           />
         </View>
         <View>
-          <TouchableOpacity style={ styles.btn }>
+          <TouchableOpacity
+            onPress={ () => this.submit( inputText ) }
+            style={ styles.btn }
+          >
             <Text style={ styles.btnText }>Submit</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

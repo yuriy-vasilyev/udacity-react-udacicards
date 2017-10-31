@@ -17,6 +17,7 @@ export function addDeck ( deckTitle ) {
 export function addCard ( deckTitle, question, answer ) {
   return {
     type: types.ADD_CARD,
+    deckTitle,
     question,
     answer
   }
