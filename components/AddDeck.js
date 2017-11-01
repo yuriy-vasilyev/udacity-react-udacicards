@@ -22,7 +22,7 @@ class AddDeck extends Component {
     if ( '' === title ) {
       return;
     }
-    
+
     this.props.dispatch( addDeck( title ) );
     submitDeck( title );
     this.props.navigation.navigate( 'Decks' );
@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20
+    padding: 20,
+    backgroundColor: colors.white
   },
   title: {
     fontSize: 30,
