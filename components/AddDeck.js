@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import * as colors from '../utils/colors';
 import { addDeck } from '../actions';
-import { submitDeck } from '../utils/api'
+import { submitDeck } from '../utils/api';
 
 class AddDeck extends Component {
   state = {

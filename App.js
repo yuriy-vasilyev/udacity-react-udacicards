@@ -10,6 +10,8 @@ import { Ionicons } from '@expo/vector-icons';
 import SingleDeck from './components/SingleDeck';
 import Decks from './components/Decks';
 import AddDeck from './components/AddDeck';
+import AddCard from './components/AddCard';
+import Quiz from './components/Quiz';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -63,7 +65,28 @@ const MainNavigator = StackNavigator({
   },
   SingleDeck: {
     screen: SingleDeck,
+    navigationOptions: ({ navigation }) => ({
+      title: navigation.state.params.title,
+      headerTintColor: colors.white,
+      headerStyle: {
+        backgroundColor: colors.primary
+      }
+    })
+  },
+  AddCard: {
+    screen: AddCard,
     navigationOptions: {
+      title: 'Add Card',
+      headerTintColor: colors.white,
+      headerStyle: {
+        backgroundColor: colors.primary
+      }
+    }
+  },
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: {
+      title: 'Quiz',
       headerTintColor: colors.white,
       headerStyle: {
         backgroundColor: colors.primary

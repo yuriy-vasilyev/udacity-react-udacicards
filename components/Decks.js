@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native
 import { receiveDecks } from '../actions';
 import { fetchDecks } from '../utils/api';
 import * as colors from '../utils/colors';
+import { getCardsWord } from '../utils/helpers';
 
 class Decks extends Component {
   state = {
@@ -19,18 +20,26 @@ class Decks extends Component {
       .catch( ( error ) => console.warn( 'Fetching decks error: ' + error ) );
   }
 
-  getCardsWord ( length ) {
-    return ( 1 === length ? 'card' : 'cards' );
-  }
-
   keyExtractor = ( item, index ) => item.title;
 
-  renderItem = ({ item }) => (
-    <TouchableOpacity style={ styles.item }>
-      <Text style={ styles.itemTitle }>{ item.title }</Text>
-      <Text style={ styles.itemSubTitle }>{ item.questions.length } { this.getCardsWord( item.questions.length ) }</Text>
-    </TouchableOpacity>
-  )
+  renderItem = ({ item }) => {
+    const cardsNumber = item.questions.length;
+    return (
+      <TouchableOpacity
+        style={ styles.item }
+        onPress={ () => this.props.navigation.navigate(
+          'SingleDeck',
+          {
+            title: item.title,
+            cardsNumber
+          }
+        )}
+        >
+          <Text style={ styles.itemTitle }>{ item.title }</Text>
+          <Text style={ styles.itemSubTitle }>{ cardsNumber } { getCardsWord( cardsNumber ) }</Text>
+        </TouchableOpacity>
+    );
+  }
 
   render() {
 

@@ -1,2 +1,3 @@
-import { AsyncStorage } from 'react-native';
-import { addDeck } from './helpers';
+export function getCardsWord ( length ) {
+  return ( 1 === length ? 'card' : 'cards' );
+}
