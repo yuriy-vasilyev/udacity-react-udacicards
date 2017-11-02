@@ -25,7 +25,7 @@ class AddDeck extends Component {
 
     this.props.dispatch( addDeck( title ) );
     submitDeck( title );
-    this.props.navigation.navigate( 'Decks' );
+    this.props.navigation.navigate( 'SingleDeck', { title } );
     this.setState({ inputText: '' });
   }
 

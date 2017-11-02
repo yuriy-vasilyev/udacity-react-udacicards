@@ -14,6 +14,13 @@ export function addDeck ( deckTitle ) {
   }
 }
 
+export function removeDeck ( deckTitle ) {
+  return {
+    type: types.REMOVE_DECK,
+    deckTitle,
+  }
+}
+
 export function addCard ( deckTitle, question, answer ) {
   return {
     type: types.ADD_CARD,

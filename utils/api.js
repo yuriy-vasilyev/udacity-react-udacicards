@@ -15,8 +15,15 @@ export function submitDeck ( title ) {
   }));
 }
 
+export function deleteDeck ( decks, title ) {
+  return AsyncStorage.setItem( APP_STORAGE_KEY, JSON.stringify({
+    ...decks,
+    [ title ]: undefined
+  }))
+}
+
 export function submitCard ( decks, deckTitle, question, answer ) {
-  return AsyncStorage.mergeItem( APP_STORAGE_KEY, JSON.stringify({
+  return AsyncStorage.setItem( APP_STORAGE_KEY, JSON.stringify({
     ...decks,
     [ deckTitle ]: {
       deckTitle,

@@ -44,7 +44,7 @@ class AddCard extends Component {
     return (
       <KeyboardAvoidingView behavior="padding" style={ styles.container }>
         <View>
-          <Text style={ styles.label }>Question</Text>
+          <Text style={ styles.label }>Statement</Text>
         </View>
         <View style={{ marginBottom: 30 }}>
           <TextInput
@@ -54,7 +54,7 @@ class AddCard extends Component {
           />
         </View>
         <View>
-          <Text style={ styles.label }>Answer</Text>
+          <Text style={ styles.label }>Is it correct?</Text>
         </View>
         <RadioForm
           radio_props={ radioProps }
