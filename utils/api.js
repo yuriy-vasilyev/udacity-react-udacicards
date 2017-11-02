@@ -15,11 +15,18 @@ export function submitDeck ( title ) {
   }));
 }
 
-export function submitCard ( deckTitle, question, answer ) {
+export function submitCard ( decks, deckTitle, question, answer ) {
   return AsyncStorage.mergeItem( APP_STORAGE_KEY, JSON.stringify({
+    ...decks,
     [ deckTitle ]: {
-      title,
-      questions: []
+      deckTitle,
+      questions: [
+        ...decks[ deckTitle ]['questions'],
+        {
+          question,
+          answer
+        }
+      ]
     }
   }))
 }

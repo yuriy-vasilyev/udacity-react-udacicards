@@ -6,8 +6,10 @@ import { getCardsWord } from '../utils/helpers';
 
 class SingleDeck extends Component {
   render() {
-    const { title, cardsNumber } = this.props.navigation.state.params;
-    const { navigation } = this.props;
+    const { title } = this.props.navigation.state.params;
+    const { navigation, decks } = this.props;
+    const cardsNumber = decks[ title ].questions.length;
+
 
     return (
       <View style={ styles.item }>
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
   }
 });
 
-function mapStateToProps({ decks }) {
+function mapStateToProps( decks ) {
   return {
     decks
   }
