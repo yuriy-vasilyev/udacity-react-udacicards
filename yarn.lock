@@ -4487,6 +4487,10 @@ react-native-scripts@1.6.0:
     rimraf "^2.6.1"
     xdl "46.0.1"
 
+react-native-simple-radio-button@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-simple-radio-button/-/react-native-simple-radio-button-2.7.0.tgz#0ad7e9beda7650519ca7ae479ee94cf7facd7d4e"
+
 react-native-svg@5.4.2:
   version "5.4.2"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-5.4.2.tgz#a01b4d88cda4b8ef4b2bc1adf05e11ec93a77b79"

@@ -13,11 +13,12 @@ import * as colors from '../utils/colors';
 import { addCard } from '../actions';
 import { submitCard } from '../utils/api';
 import { NavigationActions } from 'react-navigation';
+import RadioForm from 'react-native-simple-radio-button';
 
 class AddCard extends Component {
   state = {
     question: '',
-    answer: ''
+    answer: -1
   }
 
   submit = ( title, question, answer ) => {
@@ -27,13 +28,18 @@ class AddCard extends Component {
 
     this.props.dispatch( addCard( title, question, answer ) );
     submitCard( this.props.decks, title, question, answer );
-    this.props.navigation.navigate( 'SingleDeck', { title } );
-    this.setState({ question: '', answer: '' });
+    this.props.navigation.dispatch( NavigationActions.back() );
+    this.setState({ question: '', answer: -1 });
   }
 
   render () {
     const { question, answer } = this.state;
     const { title } = this.props.navigation.state.params;
+
+    const radioProps = [
+      { label: 'Yes', value: 1 },
+      { label: 'No', value: 0 }
+    ];
 
     return (
       <KeyboardAvoidingView behavior="padding" style={ styles.container }>
@@ -50,13 +56,15 @@ class AddCard extends Component {
         <View>
           <Text style={ styles.label }>Answer</Text>
         </View>
-        <View style={{ marginBottom: 30 }}>
-          <TextInput
-            style={ styles.input }
-            onChangeText={ ( answer ) => this.setState({ answer }) }
-            value={ answer }
-          />
-        </View>
+        <RadioForm
+          radio_props={ radioProps }
+          initial={ -1 }
+          formHorizontal={ true }
+          labelHorizontal={ false }
+          buttonColor={ colors.primary }
+          onPress={ ( value ) => { this.setState({ answer: value }) } }
+          style={{ marginBottom: 30 }}
+        />
         <View>
           <TouchableOpacity
             onPress={ () => this.submit( title, question, answer ) }
