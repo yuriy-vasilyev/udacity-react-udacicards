@@ -6,7 +6,7 @@ function getRandomInt( min, max ) {
   return Math.floor( Math.random() * ( max - min ) ) + min;
 }
 
-export function getAnswerText( answer ) {
+export function getResultText( answer ) {
   const rightAnswers = [
     'Yes!',
     'Indeed!',
@@ -14,7 +14,9 @@ export function getAnswerText( answer ) {
     'True!',
     'Correct!',
     'Yep',
-    'Affirmative'
+    'Affirmative',
+    "You're awesome!",
+    "You're right!"
   ];
 
   const wrongAnswers = [
@@ -22,7 +24,8 @@ export function getAnswerText( answer ) {
     'Not this time!',
     'Nope',
     'Negative',
-    'Not at all'
+    'Not at all',
+    'Try next time!'
   ];
 
   switch ( answer ) {
@@ -31,6 +34,19 @@ export function getAnswerText( answer ) {
 
     case 0:
       return wrongAnswers[ getRandomInt( 0, wrongAnswers.length - 1 ) ]
+
+    default:
+      return 'You provided neither 1, nor 0.';
+  }
+}
+
+export function getAnswerText( answer ) {
+  switch ( answer ) {
+    case 1:
+      return 'Yes';
+
+    case 0:
+      return 'No';
 
     default:
       return 'You provided neither 1, nor 0.';

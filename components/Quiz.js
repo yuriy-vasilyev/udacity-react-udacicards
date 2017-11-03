@@ -2,38 +2,140 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Platform, Animated, TouchableOpacity, Modal } from 'react-native';
 import * as colors from '../utils/colors';
-import { getAnswerText } from '../utils/helpers';
+import { getResultText, getAnswerText } from '../utils/helpers';
 import Results from './Results';
+import { Ionicons } from '@expo/vector-icons';
 
 class Quiz extends Component {
   state = {
     cardIndex: 1,
-    score: 0,
     view: 'question',
-    isEnd: false
+    isLast: false,
+    isEnd: false,
+    modalVisible: false
+  }
+
+  score = 0
+
+  cardsLength = null
+
+  submittedAnswer = null
+
+  setModalVisible ( visible ) {
+    this.setState({ modalVisible: visible  });
+  }
+
+  getModalIcon = ( isCorrect ) => {
+    if ( isCorrect ) {
+      return (
+        <Ionicons
+          name={ 'ios' === Platform.OS ? 'ios-checkmark-circle-outline' : 'md-checkmark-circle-outline' }
+          size={ 60 }
+          color={ colors.success }
+        />
+      )
+    } else {
+      return (
+        <Ionicons
+          name={ 'ios' === Platform.OS ? 'ios-close-circle-outline' : 'md-close-circle' }
+          size={ 60 }
+          color={ colors.error }
+        />
+      )
+    }
+  }
+
+  reset = () => {
+    this.submittedAnswer = null;
+    this.score = 0;
+    this.setState( state => ({
+      cardIndex: 1,
+      view: 'question',
+      modalVisible: false,
+      isLast: false,
+      isEnd: false
+    }));
   }
 
   submit = ( answer ) => {
+    this.submittedAnswer = answer;
+    this.setModalVisible( true );
+  }
 
+  switchToNextCard = () => {
+    this.submittedAnswer = null;
+    this.setState( state => ({
+      cardIndex: ++state.cardIndex,
+      view: 'question',
+      modalVisible: false,
+      isLast: ++state.cardIndex === this.cardsLength ? true : false
+    }));
   }
 
   render () {
     const { decks } = this.props;
     const { title } = this.props.navigation.state.params;
-    const { cardIndex, score, view, isEnd } = this.state;
-    const cardsLength = decks[ title ]['questions'].length;
+    const { cardIndex, view, isLast, isEnd, modalVisible } = this.state;
     const card = decks[ title ]['questions'][ cardIndex - 1 ];
     const text = 'question' === view ? card['question'] : getAnswerText( card['answer'] );
     const button = 'question' === view ? 'Answer' : 'Question';
+    this.cardsLength = decks[ title ]['questions'].length;
+
+    let resultText = '';
+    if ( this.submittedAnswer === card['answer'] ) {
+      this.score++;
+      resultText = getResultText( 1 );
+    } else {
+      resultText = getResultText( 0 );
+    }
+
+    const modalBtnText = isLast ? 'Show Results' : 'Next Card';
 
     if ( true === isEnd ) {
-      return <Results score={ score } cardsLength={ cardsLength } deck={ title } />
+      return <Results score={ this.score } cardsLength={ this.cardsLength } deck={ title } />
     }
 
     return (
       <View style={ styles.outerContainer }>
+        <Modal
+          animationType="fade"
+          transparent={ false }
+          visible={ modalVisible }
+          onRequestClose={ () => { alert( "Modal has been closed." ) } }
+          >
+         <View style={ styles.modalContainer }>
+          <View style={ styles.container }>
+            { this.getModalIcon( this.submittedAnswer === card['answer'] ) }
+            <Text
+              style={[ styles.modalTitle, {
+                color: this.submittedAnswer === card['answer'] ? colors.success : colors.error
+              } ]}
+            >{ resultText }</Text>
+            <View style={{ marginTop: 30 }}>
+              <TouchableOpacity
+                style={[ styles.btn, { backgroundColor: colors.primary } ]}
+                onPress={ () => {
+                  if ( isLast ) {
+                    this.setState({ isEnd: true });
+                  } else {
+                    this.switchToNextCard();
+                  }
+                }}
+              ><Text style={ styles.btnText }>{ modalBtnText }</Text>
+              </TouchableOpacity>
+              { true !== isLast && (
+                <TouchableOpacity
+                  style={{ marginTop: 50 }}
+                  onPress={ () => this.reset() }
+                  ><Text style={ styles.resetBtn }>Reset Quiz</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+         </View>
+        </Modal>
         <View style={{ marginTop: 20, marginLeft: 20 }}>
-          <Text style={{ fontSize: 18 }}>{ cardIndex } / { cardsLength }</Text>
+          <Text style={{ fontSize: 18 }}>{ cardIndex } / { this.cardsLength }</Text>
         </View>
         <View style={ styles.container }>
           <View>
@@ -43,13 +145,11 @@ class Quiz extends Component {
             onPress={ () => this.setState( state => ({
               ...state,
               view: 'question' === view ? 'answer' : 'question'
-            }))}
-          >
+            }))}>
             <Text
               style={[ styles.viewBtnText, {
-                color: 'question' === view ? colors.error : colors.success
-              } ]}
-            >{ button }</Text>
+              color: 'question' === view ? colors.error : colors.success
+            } ]}>{ button }</Text>
           </TouchableOpacity>
           <View style={{ marginTop: 50 }}>
             <TouchableOpacity
@@ -99,6 +199,19 @@ const styles = StyleSheet.create({
     color: colors.white,
     textAlign: 'center',
     fontSize: 18
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalTitle: {
+    fontSize: 32
+  },
+  resetBtn: {
+    fontSize: 20,
+    color: colors.gray,
+    textAlign: 'center'
   }
 });
 

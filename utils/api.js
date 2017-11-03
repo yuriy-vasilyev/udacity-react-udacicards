@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 const APP_STORAGE_KEY = '@udacicards:decks';
 
 export function fetchDecks () {
+  // AsyncStorage.removeItem( APP_STORAGE_KEY );
   return AsyncStorage.getItem( APP_STORAGE_KEY );
 }
 
@@ -22,13 +23,13 @@ export function deleteDeck ( decks, title ) {
   }))
 }
 
-export function submitCard ( decks, deckTitle, question, answer ) {
+export function submitCard ( decks, title, question, answer ) {
   return AsyncStorage.setItem( APP_STORAGE_KEY, JSON.stringify({
     ...decks,
-    [ deckTitle ]: {
-      deckTitle,
+    [ title ]: {
+      title,
       questions: [
-        ...decks[ deckTitle ]['questions'],
+        ...decks[ title ]['questions'],
         {
           question,
           answer
