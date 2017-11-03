@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Platform, Animated, TouchableOpacity, Modal } from 'react-native';
 import * as colors from '../utils/colors';
 import { getResultText, getAnswerText } from '../utils/helpers';
-import Results from './Results';
 import { Ionicons } from '@expo/vector-icons';
+import { NavigationActions } from 'react-navigation';
 
 class Quiz extends Component {
   state = {
@@ -92,7 +92,34 @@ class Quiz extends Component {
     const modalBtnText = isLast ? 'Show Results' : 'Next Card';
 
     if ( true === isEnd ) {
-      return <Results score={ this.score } cardsLength={ this.cardsLength } deck={ title } />
+      return (
+        <View style={ styles.outerContainer }>
+          <View style={ styles.container }>
+            <View>
+              <Text style={ styles.title }>Your score is</Text>
+              <Text style={{ fontSize: 60, textAlign: 'center' }}>{ this.score }</Text>
+            </View>
+            <View style={{ marginTop: 30 }}>
+              <TouchableOpacity
+                style={[ styles.btn, {
+                  backgroundColor: colors.primary,
+                  borderColor: colors.primary,
+                  borderWidth: 2 }
+                ]}
+                onPress={ () => this.props.navigation.dispatch( NavigationActions.back() ) }
+                ><Text style={ styles.btnText }>Back to Deck</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ marginTop: 10 }}>
+              <TouchableOpacity
+                style={[ styles.defaultBtn, { marginTop: 10 } ]}
+                onPress={ () => this.reset() }
+                ><Text style={ styles.defaultBtnText }>Reset Quiz</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      );
     }
 
     return (
@@ -208,11 +235,23 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 32
   },
+  defaultBtn: {
+    borderColor: colors.primary,
+    borderWidth: 2,
+    width: 200,
+    padding: 15,
+    borderRadius: 'ios' === Platform.OS ? 7 : 2
+  },
+  defaultBtnText: {
+    textAlign: 'center',
+    fontSize: 18,
+  },
   resetBtn: {
     fontSize: 20,
     color: colors.gray,
     textAlign: 'center'
   }
+
 });
 
 function mapStateToProps( decks ) {
