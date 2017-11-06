@@ -57,18 +57,21 @@ class Quiz extends Component {
     }));
   }
 
-  submit = ( answer ) => {
+  submit = ( answer, cardAnswer ) => {
     this.submittedAnswer = answer;
+    if ( answer === cardAnswer ) {
+      this.score++;
+    }
     this.setModalVisible( true );
   }
 
   switchToNextCard = () => {
     this.submittedAnswer = null;
     this.setState( state => ({
-      cardIndex: ++state.cardIndex,
+      cardIndex: (state.cardIndex + 1),
       view: 'question',
       modalVisible: false,
-      isLast: ++state.cardIndex === this.cardsLength ? true : false
+      isLast: (state.cardIndex + 1) === this.cardsLength ? true : false
     }));
   }
 
@@ -83,7 +86,6 @@ class Quiz extends Component {
 
     let resultText = '';
     if ( this.submittedAnswer === card['answer'] ) {
-      this.score++;
       resultText = getResultText( 1 );
     } else {
       resultText = getResultText( 0 );
@@ -181,12 +183,12 @@ class Quiz extends Component {
           <View style={{ marginTop: 50 }}>
             <TouchableOpacity
               style={[ styles.btn, { backgroundColor: colors.success } ]}
-              onPress={ () => this.submit( 1 ) }
+              onPress={ () => this.submit( 1, card['answer'] ) }
             ><Text style={ styles.btnText }>Correct</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[ styles.btn, { backgroundColor: colors.error } ]}
-              onPress={ () => this.submit( 0 ) }
+              onPress={ () => this.submit( 0, card['answer'] ) }
             ><Text style={ styles.btnText }>Incorrect</Text>
             </TouchableOpacity>
           </View>
