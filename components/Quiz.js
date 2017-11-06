@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Platform, Animated, TouchableOpacity, Modal } from 'react-native';
 import * as colors from '../utils/colors';
-import { getResultText, getAnswerText } from '../utils/helpers';
+import { getResultText, getAnswerText, clearLocalNotification, setLocalNotification } from '../utils/helpers';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 
@@ -100,6 +100,10 @@ class Quiz extends Component {
         Animated.timing( bounceValue, { duration: 200, toValue: 1.5, delay: 500 } ),
         Animated.spring( bounceValue, { toValue: 1, friction: 4 } )
       ]).start();
+
+      clearLocalNotification()
+        .then( setLocalNotification );
+
       return (
         <View style={ styles.outerContainer }>
           <View style={ styles.container }>
@@ -152,6 +156,7 @@ class Quiz extends Component {
                 onPress={ () => {
                   if ( isLast ) {
                     this.setState({ isEnd: true });
+
                   } else {
                     this.switchToNextCard();
                   }

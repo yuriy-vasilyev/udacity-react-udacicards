@@ -12,6 +12,7 @@ import Decks from './components/Decks';
 import AddDeck from './components/AddDeck';
 import AddCard from './components/AddCard';
 import Quiz from './components/Quiz';
+import { setLocalNotification } from './utils/helpers';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -96,6 +97,10 @@ const MainNavigator = StackNavigator({
 })
 
 export default class App extends Component {
+  componentDidMount() {
+    setLocalNotification();
+  }
+
   render() {
     return (
       <Provider store={ createStore( reducer ) }>
