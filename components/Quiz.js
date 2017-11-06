@@ -12,7 +12,8 @@ class Quiz extends Component {
     view: 'question',
     isLast: false,
     isEnd: false,
-    modalVisible: false
+    modalVisible: false,
+    bounceValue: new Animated.Value(0)
   }
 
   score = 0
@@ -53,7 +54,8 @@ class Quiz extends Component {
       view: 'question',
       modalVisible: false,
       isLast: false,
-      isEnd: false
+      isEnd: false,
+      bounceValue: new Animated.Value(0)
     }));
   }
 
@@ -78,7 +80,7 @@ class Quiz extends Component {
   render () {
     const { decks } = this.props;
     const { title } = this.props.navigation.state.params;
-    const { cardIndex, view, isLast, isEnd, modalVisible } = this.state;
+    const { cardIndex, view, isLast, isEnd, modalVisible, bounceValue } = this.state;
     const card = decks[ title ]['questions'][ cardIndex - 1 ];
     const text = 'question' === view ? card['question'] : getAnswerText( card['answer'] );
     const button = 'question' === view ? 'Answer' : 'Question';
@@ -94,12 +96,16 @@ class Quiz extends Component {
     const modalBtnText = isLast ? 'Show Results' : 'Next Card';
 
     if ( true === isEnd ) {
+      Animated.sequence([
+        Animated.timing( bounceValue, { duration: 200, toValue: 1.5, delay: 500 } ),
+        Animated.spring( bounceValue, { toValue: 1, friction: 4 } )
+      ]).start();
       return (
         <View style={ styles.outerContainer }>
           <View style={ styles.container }>
             <View>
               <Text style={ styles.title }>Your score is</Text>
-              <Text style={{ fontSize: 60, textAlign: 'center' }}>{ this.score }</Text>
+              <Animated.Text style={{ fontSize: 100, textAlign: 'center', transform: [{ scale: bounceValue }] }}>{ this.score }</Animated.Text>
             </View>
             <View style={{ marginTop: 30 }}>
               <TouchableOpacity
