@@ -17,18 +17,6 @@ function decks ( state = {}, action ) {
         }
       }
 
-    case types.REMOVE_DECK:
-      alert( JSON.stringify(
-        {
-          ...state,
-          [ action.deckTitle ]: undefined
-        }
-      ));
-      return {
-        ...state,
-        [ action.deckTitle ]: undefined
-      }
-
     case types.ADD_CARD:
       return {
         ...state,
