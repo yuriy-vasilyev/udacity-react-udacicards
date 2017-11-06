@@ -22,8 +22,10 @@ class Quiz extends Component {
 
   submittedAnswer = null
 
+  isOneCard = false
+
   setModalVisible ( visible ) {
-    this.setState({ modalVisible: visible  });
+    this.setState({ modalVisible: visible });
   }
 
   getModalIcon = ( isCorrect ) => {
@@ -86,6 +88,10 @@ class Quiz extends Component {
     const button = 'question' === view ? 'Answer' : 'Question';
     this.cardsLength = decks[ title ]['questions'].length;
 
+    if ( 1 === this.cardsLength ) {
+      this.isOneCard = true;
+    }
+
     let resultText = '';
     if ( this.submittedAnswer === card['answer'] ) {
       resultText = getResultText( 1 );
@@ -93,11 +99,11 @@ class Quiz extends Component {
       resultText = getResultText( 0 );
     }
 
-    const modalBtnText = isLast ? 'Show Results' : 'Next Card';
+    const modalBtnText = isLast || this.isOneCard ? 'Show Results' : 'Next Card';
 
     if ( true === isEnd ) {
       Animated.sequence([
-        Animated.timing( bounceValue, { duration: 200, toValue: 1.5, delay: 500 } ),
+        Animated.timing( bounceValue, { duration: 200, toValue: 1.5, delay: 250 } ),
         Animated.spring( bounceValue, { toValue: 1, friction: 4 } )
       ]).start();
 
@@ -154,7 +160,7 @@ class Quiz extends Component {
               <TouchableOpacity
                 style={[ styles.btn, { backgroundColor: colors.primary } ]}
                 onPress={ () => {
-                  if ( isLast ) {
+                  if ( isLast || this.isOneCard ) {
                     this.setState({ isEnd: true });
 
                   } else {
